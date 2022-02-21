@@ -13,7 +13,8 @@ class Field{
         this.y_location = 0;
         this.field[0][0] = pathCharacter;
     }
-    static generateField(height, width, percentage = 0.2) {
+    //Static generate function for the board
+    static generateField(height, width, percentage) {
         let field = new Array(height);
         for (let i = 0; i < field.length; i++) {
         field[i] = new Array(width);
@@ -24,17 +25,17 @@ class Field{
             field[i][j] = rand > percentage ? fieldCharacter : hole;
         }
         }
-
+        //Place the hat at a starting random location
         const hatLocation = {
-        x: Math.floor(Math.random() * width),
-        y: Math.floor(Math.random() * height),
+        xx: Math.floor(Math.random() * width),
+        yy: Math.floor(Math.random() * height),
         };
 
-        field[hatLocation.y][hatLocation.x] = hat;
+        field[hatLocation.yy][hatLocation.xx] = hat;
         return field;
     }
 
-    
+    //Start playing the game
     startEngine() {
         let playing = true;
         while (playing) {
@@ -58,7 +59,7 @@ class Field{
         }
       }
 
-
+      // Initiate the game with the user's moves
       startPlay() {
         const answer = prompt("Which way would you like to move? (Up = 'U' Down = 'D' Left = 'L' Right = 'R' x = 'Exit'--> ").toLowerCase();
         switch (answer) {
@@ -75,15 +76,15 @@ class Field{
             this.y_location += 1;
             break;
         case "x":
-           exit();
+           return false;
             break;
         default:
-        console.log("Invalid. Enter U, D, L or R.");
+        console.log("bad choice, try again");
         this.startPlay();
         break;
         }
       }
-
+      //Checking if the keys aren't out of the board
       isInBounds() {
         return (
           this.y_location >= 0 &&
@@ -92,14 +93,15 @@ class Field{
           this.x_location < this.field[0].length
         );
       }
+      //If payer found the hat
       isHat() {
         return this.field[this.y_location][this.x_location] === hat;
       }
-
+      //If the player got in hole -
       isHole() {
         return this.field[this.y_location][this.x_location] === hole;
       }
-
+      //Print the board
       print() {
         const displayString = this.field
           .map((row) => {
